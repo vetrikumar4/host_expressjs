@@ -29,7 +29,7 @@ router.post("/fetch-images", (req, res) => {
       //   console.log(token); // You can log the token or use it for further actions
     })
     .catch((error) => console.error("Error:", error));
-  const { imageUrl1, imageUrl2 } = req.body;
+  let { imageUrl1, imageUrl2, ID_type, userPrompt } = req.body;
 
   // Check if both URLs are provided
   if (!imageUrl1 || !imageUrl2) {
@@ -60,21 +60,24 @@ router.post("/fetch-images", (req, res) => {
       form.append("uploaded_files", response2.data, { filename: "image2.jpg" });
 
       // Append the user prompt as JSON
-      const userPrompt = {
-        "ID Number": "int",
-        Name: "str",
-        "Date of Birth": "datetime",
-        Nationality: "str",
-        "Issuing Date": "datetime",
-        "Expiry Date": "datetime",
-        Sex: "str",
-        "Card Number": "str",
-        Occupation: "str",
-        "Employer or Sponsor": "str",
-        "Issuing Place": "str",
-      };
+      if (userPrompt == undefined) {
+        userPrompt = {
+          "ID Number": "int",
+          Name: "str",
+          "Date of Birth": "datetime",
+          Nationality: "str",
+          "Issuing Date": "datetime",
+          "Expiry Date": "datetime",
+          Sex: "str",
+          "Card Number": "str",
+          Occupation: "str",
+          "Employer or Sponsor": "str",
+          "Issuing Place": "str",
+        };
+      }
       form.append("user_prompt", JSON.stringify(userPrompt));
-
+      console.log(ID_type);
+      console.log(userPrompt);
       // Define the API endpoint and Authorization token
       const url =
         "https://aura-ai.aurainsure.tech/v1/sme/?document_name=emirates-id";
